@@ -1,0 +1,23 @@
+{
+  "name": "bfx-svc-boot-js",
+  "version": "1.0.0",
+  "description": "Worker CLI for svc-js",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run lint",
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitfinexcom/bfx-svc-boot-js.git"
+  },
+  "keywords": [
+    "bitfinex"
+  ],
+  "author": "Robert Kowalski <rok@bitfinex.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "yargs": "^9.0.1"
+  }
+}
