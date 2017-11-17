@@ -15,7 +15,7 @@
     "bitfinex"
   ],
   "author": "Robert Kowalski <rok@bitfinex.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "lodash": "^4.17.4",
     "yargs": "^9.0.1"
