@@ -17,6 +17,22 @@ const cmd = require('yargs')
   .help('help')
   .argv
 
-const worker = require('./lib/worker.js')(cmd)
+const hnd = require('./lib/worker.js')(cmd)
 
-module.exports = worker
+let shutdown = 0
+process.on('SIGINT', () => {
+  if (shutdown) {
+    return
+  }
+  shutdown = 1
+
+  if (!hnd.active) {
+    return
+  }
+  console.log('BKW', process.title, 'shutting down')
+  hnd.stop(() => {
+    process.exit()
+  })
+})
+
+module.exports = hnd
