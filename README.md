@@ -8,6 +8,7 @@ Used to spawn a `bfx-svc-js` service. Contains the worker CLI.
 wtype         worker name, e.g. wrk-util-net-api
 env           production or development
 debug         enable debug mode, with heap dump support
+ssl           ssl flag
 
 For workers that require a port:
 

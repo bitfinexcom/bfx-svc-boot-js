@@ -14,6 +14,9 @@ const cmd = require('yargs')
     default: false,
     type: 'boolean'
   })
+  .option('ssl', {
+    type: 'boolean'
+  })
   .help('help')
   .argv
 
