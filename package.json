@@ -1,6 +1,6 @@
 {
-  "name": "bfx-svc-boot-js",
-  "version": "1.0.2",
+  "name": "@bitfinex/bfx-svc-boot-js",
+  "version": "1.1.0",
   "description": "Worker CLI for svc-js",
   "main": "index.js",
   "scripts": {
