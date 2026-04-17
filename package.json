@@ -4,7 +4,7 @@
   "description": "Worker CLI for svc-js",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint",
+    "test": "npm run lint && brittle test/*.test.js",
     "lint": "standard"
   },
   "repository": {
@@ -21,6 +21,8 @@
     "yargs": "^17.2.1"
   },
   "devDependencies": {
-    "standard": "^16.0.3"
+    "brittle": "^3.19.1",
+    "standard": "^16.0.3",
+    "test-tmp": "^1.4.0"
   }
 }
