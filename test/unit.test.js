@@ -27,18 +27,16 @@ function run (dir, env) {
 }
 
 test('JSON config resolution', async (t) => {
-  t.comment('loads base JSON config if env is not provided')
-  {
+  await t.test('loads base JSON config if env is not provided', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'common.json', { key: 'value', nested: { a: 1 } })
     writeConfig(dir, 'production.common.json', { key: 'env-specific' })
 
     const wrk = run(dir)
     t.alike(wrk.conf, { key: 'value', nested: { a: 1 } })
-  }
+  })
 
-  t.comment('loads env-specific JSON config over base others')
-  {
+  await t.test('loads env-specific JSON config over base others', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'common.json', { key: 'base' })
     writeConfig(dir, 'production.common.json', { key: 'prod-env-specific' })
@@ -46,61 +44,55 @@ test('JSON config resolution', async (t) => {
 
     const wrk = run(dir, 'production')
     t.is(wrk.conf.key, 'prod-env-specific')
-  }
+  })
 
-  t.comment('falls back to base JSON if env-specific JSON is missing')
-  {
+  await t.test('falls back to base JSON if env-specific JSON is missing', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'common.json', { key: 'base' })
 
     const wrk = run(dir, 'production')
     t.is(wrk.conf.key, 'base')
-  }
+  })
 })
 
 test('JS config resolution', async (t) => {
-  t.comment('loads base JS config when no JSON exists')
-  {
+  await t.test('loads base JS config when no JSON exists', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'common.js', "module.exports = { key: 'from-js' }")
 
     const wrk = run(dir)
     t.is(wrk.conf.key, 'from-js')
-  }
+  })
 
-  t.comment('loads env-specific JS config when no JSON exists and env is provided')
-  {
+  await t.test('loads env-specific JS config when no JSON exists and env is provided', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'development.common.js', "module.exports = { key: 'dev-env-js' }")
     writeConfig(dir, 'production.common.js', "module.exports = { key: 'prod-js' }")
 
     const wrk = run(dir, 'development')
     t.is(wrk.conf.key, 'dev-env-js')
-  }
+  })
 
-  t.comment('falls back to base JS if env-specific JS is missing and no JSON exists')
-  {
+  await t.test('falls back to base JS if env-specific JS is missing and no JSON exists', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'common.js', "module.exports = { key: 'base-js' }")
 
     const wrk = run(dir, 'production')
     t.is(wrk.conf.key, 'base-js')
-  }
+  })
 })
 
 test('config priority order', async (t) => {
-  t.comment('JSON config takes priority over JS config')
-  {
+  await t.test('JSON config takes priority over JS config', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'common.json', { source: 'json' })
     writeConfig(dir, 'common.js', "module.exports = { source: 'js' }")
 
     const wrk = run(dir)
     t.is(wrk.conf.source, 'json')
-  }
+  })
 
-  t.comment('env-specific JSON has highest priority')
-  {
+  await t.test('env-specific JSON has highest priority', async (t) => {
     const dir = await setupDir(t)
     writeConfig(dir, 'production.common.json', { source: 'env-json' })
     writeConfig(dir, 'common.json', { source: 'base-json' })
@@ -109,5 +101,5 @@ test('config priority order', async (t) => {
 
     const wrk = run(dir, 'production')
     t.is(wrk.conf.source, 'env-json')
-  }
+  })
 })
