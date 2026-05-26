@@ -103,3 +103,13 @@ test('config priority order', async (t) => {
     t.is(wrk.conf.source, 'env-json')
   })
 })
+
+test('staging env loads staging config', async (t) => {
+  const dir = await setupDir(t)
+  writeConfig(dir, 'common.json', { key: 'base' })
+  writeConfig(dir, 'staging.common.json', { key: 'staging-env' })
+
+  const wrk = run(dir, 'staging')
+  t.is(wrk.ctx.env, 'staging')
+  t.is(wrk.conf.key, 'staging-env')
+})

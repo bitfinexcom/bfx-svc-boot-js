@@ -6,7 +6,7 @@ const cmd = require('yargs')
     type: 'string'
   })
   .option('env', {
-    choices: ['production', 'development', 'test'],
+    choices: ['production', 'development', 'staging', 'test'],
     demand: true,
     type: 'string'
   })
