@@ -6,6 +6,7 @@ const path = require('path')
 const fs = require('fs')
 
 const worker = require('../lib/worker')
+const createShutdownHandler = require('../lib/shutdown')
 const fixtureWorker = path.join(__dirname, 'fixtures', 'workers', 'dummy.js')
 
 async function setupDir (t) {
@@ -101,5 +102,49 @@ test('config priority order', async (t) => {
 
     const wrk = run(dir, 'production')
     t.is(wrk.conf.source, 'env-json')
+  })
+})
+
+test('shutdown handler', async (t) => {
+  await t.test('exits immediately when worker is not active', (t) => {
+    let exitCode = null
+    let stopCalled = false
+    const hnd = {
+      active: 0,
+      stop: () => {
+        stopCalled = true
+      }
+    }
+
+    const shutdown = createShutdownHandler(hnd, code => {
+      exitCode = code
+    }, () => {})
+
+    shutdown()
+
+    t.is(stopCalled, false)
+    t.is(exitCode, 0)
+  })
+
+  await t.test('stops active worker once before exiting', (t) => {
+    let exitCode = null
+    let stopCalls = 0
+    const hnd = {
+      active: 1,
+      stop: cb => {
+        stopCalls++
+        cb()
+      }
+    }
+
+    const shutdown = createShutdownHandler(hnd, code => {
+      exitCode = code
+    }, () => {})
+
+    shutdown()
+    shutdown()
+
+    t.is(stopCalls, 1)
+    t.is(exitCode, 0)
   })
 })
