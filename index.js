@@ -1,24 +1,11 @@
 'use strict'
 
-const cmd = require('yargs')
-  .option('wtype', {
-    demand: true,
-    type: 'string'
-  })
-  .option('env', {
-    choices: ['production', 'development', 'staging', 'test'],
-    demand: true,
-    type: 'string'
-  })
-  .option('debug', {
-    default: false,
-    type: 'boolean'
-  })
-  .help('help')
-  .argv
-
-const hnd = require('./lib/worker.js')(cmd)
+const cliParser = require('./lib/cli')
+const createWorker = require('./lib/worker')
 const createShutdownHandler = require('./lib/shutdown')
+
+const argv = cliParser()
+const hnd = createWorker(argv)
 
 const shutdown = createShutdownHandler(hnd)
 process.on('SIGINT', shutdown)
